@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ôn thi tốt nghiệp THPT môn Tin học</title>
+<style>
+:root {
+  --primary:#2563eb; --secondary:#7c3aed; --success:#16a34a; --danger:#dc2626;
+  --warning:#f59e0b; --dark:#0f172a; --light:#f8fafc; --card:#ffffff;
+  --muted:#64748b; --border:#e2e8f0;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#eff6ff,#f5f3ff);color:var(--dark)}
+header{background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;padding:34px 18px;text-align:center}
+header h1{margin:0;font-size:clamp(26px,4vw,44px);font-weight:800}
+header p{font-size:clamp(15px,2vw,20px);opacity:.95}
+.wrap{max-width:1180px;margin:auto;padding:20px}
+.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-top:-24px}
+.panel,.card,.quizBox{background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:0 12px 30px rgba(15,23,42,.08);padding:20px}
+.badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.badge{background:#eef2ff;color:#3730a3;border-radius:999px;padding:8px 12px;font-weight:700;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:#f8fafc;border-radius:14px;padding:14px;text-align:center;border:1px solid var(--border)}
+.stat b{font-size:24px;color:var(--primary)}
+h2{margin-top:28px}
+.topicGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.topic{position:relative;overflow:hidden}
+.topic h3{margin:0 0 8px;font-size:20px}
+.topic .code{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;font-weight:800;margin-bottom:10px}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+button{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;background:var(--primary);color:white}
+button:hover{filter:brightness(.95);transform:translateY(-1px)}
+button.secondary{background:#e0e7ff;color:#3730a3}
+button.green{background:var(--success)}
+button.orange{background:var(--warning);color:#111827}
+button.gray{background:#334155}
+.quizHeader{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.progressOuter{background:#e2e8f0;border-radius:999px;overflow:hidden;height:12px;margin:12px 0}
+.progressInner{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));width:0%}
+.question{padding:18px;border:1px solid var(--border);border-radius:16px;background:#fff;margin:14px 0}
+.question h3{margin:0 0 12px;font-size:18px;line-height:1.45}
+.option{display:block;border:1px solid var(--border);border-radius:12px;padding:12px;margin:8px 0;cursor:pointer;background:#f8fafc}
+.option:hover{background:#eff6ff}
+.option input{margin-right:8px}
+.tfItem{border-left:5px solid #f59e0b;padding:12px;margin:10px 0;background:#fffbeb;border-radius:10px}
+.result{border-radius:18px;padding:18px;margin-top:18px;background:#f0fdf4;border:1px solid #bbf7d0}
+.wrongBox{background:#fef2f2;border-color:#fecaca}
+.correctText{color:var(--success);font-weight:800}
+.wrongText{color:var(--danger);font-weight:800}
+.explain{color:#475569;background:#f8fafc;border-radius:10px;padding:10px;margin-top:8px}
+.footerNote{text-align:center;color:var(--muted);font-size:14px;margin:30px 0}
+.hidden{display:none}
+@media(max-width:760px){
+  .hero{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .wrap{padding:12px}
+  .panel,.card,.quizBox{padding:15px}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>ÔN THI TỐT NGHIỆP THPT MÔN TIN HỌC</h1>
+  <p>Luyện theo 7 chủ đề · Đúng/Sai chuẩn TN THPT · Thi thử 24 + 6 · Chấm điểm và nhận xét tự động</p>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <div class="panel">
+      <h2 style="margin-top:0">LUYỆN THI </h2>
+      <p>Học sinh chọn chủ đề để luyện hoặc làm đề thi thử ngẫu nhiên theo cấu trúc 24 câu trắc nghiệm + 6 câu đúng/sai.</p>
+      <div class="badges">
+        <span class="badge">✅ 7 chủ đề</span><span class="badge">✅ ≥ 20 câu/chủ đề</span><span class="badge">✅ Chấm điểm</span><span class="badge">✅ Nhận xét năng lực</span><span class="badge">✅ Responsive</span>
+      </div>
+      <div class="btns">
+        <button class="green" onclick="startMock()">Thi thử 24 + 6</button>
+        <button class="secondary" onclick="shuffleAllPractice()">Luyện ngẫu nhiên toàn bộ</button>
+        <button class="gray" onclick="resetProgress()">Xóa thống kê</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h2 style="margin-top:0">Thống kê học tập</h2>
+      <div class="stats">
+        <div class="stat"><b id="stDone">0</b><br>Đã làm</div>
+        <div class="stat"><b id="stCorrect">0</b><br>Câu đúng</div>
+        <div class="stat"><b id="stRate">0%</b><br>Tỉ lệ đúng</div>
+        <div class="stat"><b id="stTests">0</b><br>Lượt luyện</div>
+      </div>
+    </div>
+  </section>
+
+  <h2>7 chủ đề ôn thi</h2>
+  <section class="topicGrid" id="topicGrid"></section>
+
+  <section id="quizArea" class="quizBox hidden"></section>
+  <p class="footerNote"  style="color: red; font-size: medium;">Đừng để những gì bạn không thể làm cản trở những gì bạn có thể làm!</p>
+</div>
+
+<script>
+const TOPICS = [{"code": "A", "name": "Máy tính và xã hội tri thức", "questions": [{"type": "mcq", "q": "Trong tin học, mối quan hệ giữa thông tin và dữ liệu được mô tả như thế nào?", "options": ["Thông tin là các con số đã được đưa vào máy tính.", "Dữ liệu là hình thức biểu diễn của thông tin.", "Dữ liệu luôn có tính toàn vẹn cao hơn thông tin.", "Thông tin và dữ liệu là hai khái niệm hoàn toàn đồng nhất."], "answer": 1, "explain": "Dữ liệu là hình thức biểu diễn của thông tin để máy tính có thể xử lí."}, {"type": "mcq", "q": "Nếu một bộ dữ liệu chỉ có con số 39°C mà không có ngữ cảnh, điều gì sẽ xảy ra?", "options": ["Thông tin luôn được hiểu là trời rất nóng.", "Máy tính sẽ tự động gán ngữ cảnh.", "Dữ liệu bị máy tính xóa bỏ.", "Thông tin sẽ không thể xác định chính xác."], "answer": 3, "explain": "Cùng một dữ liệu có thể tạo thông tin khác nhau tùy ngữ cảnh."}, {"type": "mcq", "q": "Đơn vị lưu trữ dữ liệu nhỏ nhất mà máy tính có thể truy cập được là gì?", "options": ["Kilobyte", "Nhóm bit", "Byte", "Bit"], "answer": 2, "explain": "Byte thường là đơn vị lưu trữ nhỏ nhất mà máy tính truy cập trực tiếp."}, {"type": "mcq", "q": "Đặc điểm quan trọng nhất để xác định thiết bị thông minh là gì?", "options": ["Có màn hình cảm ứng.", "Sử dụng pin.", "Có khả năng tự chủ, tự thích ứng và kết nối trao đổi dữ liệu.", "Chỉ nghe và gọi cơ bản."], "answer": 2, "explain": "Thiết bị thông minh có khả năng tự chủ, tự thích ứng và kết nối."}, {"type": "mcq", "q": "IoT được hiểu là gì?", "options": ["Mạng lưới thiết bị thông minh kết nối Internet để thu thập và trao đổi dữ liệu.", "Phần mềm điều khiển thiết bị.", "Trang web dữ liệu điện tử.", "Máy tính xách tay có Wi-Fi."], "answer": 0, "explain": "IoT là Internet vạn vật, kết nối các thiết bị thông minh."}, {"type": "mcq", "q": "Thành tựu nào tạo ra phương thức truy cập Internet dễ dàng và nhất quán?", "options": ["Facebook", "Windows", "World Wide Web", "TCP/IP"], "answer": 2, "explain": "WWW giúp người dùng truy cập tài nguyên Internet thuận tiện qua trình duyệt."}, {"type": "mcq", "q": "Trong nền kinh tế tri thức, giá trị sản phẩm công nghệ phần lớn nằm ở đâu?", "options": ["Nhân công lắp ráp.", "Thương hiệu nổi tiếng.", "Tri thức, phần mềm và bản quyền công nghệ.", "Nguyên vật liệu rẻ."], "answer": 2, "explain": "Tri thức và công nghệ tạo giá trị lớn trong sản phẩm số."}, {"type": "mcq", "q": "Smartphone được coi là hệ thống xử lí thông tin vì sao?", "options": ["Kết nối Wi-Fi.", "Cài game.", "Có màn hình cảm ứng.", "Thu thập, xử lí, lưu trữ và truyền dữ liệu số."], "answer": 3, "explain": "Thiết bị số thực hiện các bước xử lí thông tin."}, {"type": "mcq", "q": "AI là gì?", "options": ["Khả năng máy tính thực hiện công việc mang tính trí tuệ của con người.", "Một phần mềm điện thoại.", "Công nghệ tăng tốc Internet.", "Ổ cứng tốc độ cao."], "answer": 0, "explain": "AI mô phỏng một số năng lực trí tuệ như học, suy luận, nhận dạng."}, {"type": "mcq", "q": "AI yếu là gì?", "options": ["AI thực hiện nhiệm vụ cụ thể.", "AI có trí tuệ như con người.", "AI tự sáng tạo mọi lĩnh vực.", "AI không học từ dữ liệu."], "answer": 0, "explain": "AI yếu được thiết kế cho một hoặc vài nhiệm vụ cụ thể."}, {"type": "mcq", "q": "Hệ chuyên gia MYCIN thuộc lĩnh vực nào?", "options": ["Giáo dục", "Y học", "Hóa học", "Giao thông"], "answer": 1, "explain": "MYCIN là hệ chuyên gia y học hỗ trợ chẩn đoán nhiễm khuẩn."}, {"type": "mcq", "q": "Ứng dụng nào dùng AI để chơi cờ trình độ cao?", "options": ["Google Search", "Siri", "AlphaGo", "Robot Asimo"], "answer": 2, "explain": "AlphaGo là hệ thống AI nổi tiếng trong trò chơi cờ vây."}, {"type": "mcq", "q": "Một cảnh báo lớn về AI là gì?", "options": ["Tạo video giải trí.", "Tự động hóa gây mất việc làm.", "Tăng dung lượng lưu trữ.", "Tăng tốc độ mạng."], "answer": 1, "explain": "AI có thể thay thế một số công việc lặp lại."}, {"type": "mcq", "q": "Robot Asimo do hãng nào sản xuất?", "options": ["Tesla", "Honda", "NASA", "Toshiba"], "answer": 1, "explain": "Asimo là robot hình người của Honda."}, {"type": "mcq", "q": "ChatGPT được phát triển bởi tổ chức nào?", "options": ["Apple", "OpenAI", "Microsoft", "Meta"], "answer": 1, "explain": "ChatGPT là sản phẩm do OpenAI phát triển."}, {"type": "mcq", "q": "AI tạo sinh là gì?", "options": ["AI chỉ tái tạo dữ liệu cũ.", "AI có khả năng tạo nội dung mới từ dữ liệu đầu vào.", "AI chỉ phân tích dữ liệu.", "AI chỉ dùng để tính toán."], "answer": 1, "explain": "AI tạo sinh có thể tạo văn bản, hình ảnh, âm thanh, mã lệnh."}, {"type": "mcq", "q": "Deepfake là gì?", "options": ["Tạo hình ảnh, âm thanh, video giả mạo.", "Phát hiện thông tin giả.", "Nén dữ liệu sâu.", "Sao lưu dữ liệu."], "answer": 0, "explain": "Deepfake dùng AI để giả mạo hình ảnh, âm thanh hoặc video."}, {"type": "mcq", "q": "Khả năng xử lí ngôn ngữ tự nhiên của AI là gì?", "options": ["Hiểu và phản hồi bằng ngôn ngữ con người.", "Xử lí ảnh.", "Tự động hóa thiết bị.", "Tạo ngôn ngữ mới không cần dữ liệu."], "answer": 0, "explain": "NLP giúp AI hiểu văn bản hoặc lời nói của con người."}, {"type": "mcq", "q": "Trong AI, dữ liệu huấn luyện sai lệch có thể gây ra điều gì?", "options": ["Tăng độ chính xác tuyệt đối.", "Sai lệch trong dự đoán hoặc quyết định.", "Không ảnh hưởng gì.", "Làm máy tính không khởi động."], "answer": 1, "explain": "Dữ liệu không đại diện có thể tạo bias."}, {"type": "mcq", "q": "AI trong giáo dục có thể hỗ trợ điều gì?", "options": ["Tự động hóa cập nhật hóa đơn ngân hàng.", "Quản lí giao thông.", "Trợ lí học tập trả lời câu hỏi và gợi ý tài liệu.", "Tối ưu chăm sóc vật nuôi."], "answer": 2, "explain": "AI có thể cá nhân hóa học tập và hỗ trợ giải đáp."}], "tf": [{"type": "tf", "title": "AI và xã hội tri thức", "items": [{"text": "Dữ liệu là hình thức biểu diễn của thông tin.", "answer": true}, {"text": "AI chỉ dùng trong trò chơi điện tử.", "answer": false}, {"text": "Thiết bị thông minh có thể kết nối và trao đổi dữ liệu.", "answer": true}, {"text": "Deepfake luôn là nội dung đáng tin cậy.", "answer": false}], "explain": "Cần hiểu đúng dữ liệu, thiết bị thông minh và cảnh báo AI."}, {"type": "tf", "title": "Ứng dụng AI", "items": [{"text": "ChatGPT là một ứng dụng AI tạo sinh.", "answer": true}, {"text": "MYCIN là hệ chuyên gia trong y học.", "answer": true}, {"text": "AI hiện nay đã hoàn toàn thay thế tư duy con người.", "answer": false}, {"text": "Dữ liệu huấn luyện sai lệch có thể làm AI đưa ra kết quả sai lệch.", "answer": true}], "explain": "AI có nhiều lợi ích nhưng cần kiểm soát rủi ro."}]}, {"code": "B", "name": "Mạng máy tính và Internet", "questions": [{"type": "mcq", "q": "Điểm khác biệt cơ bản về quyền sở hữu giữa LAN và Internet là gì?", "options": ["LAN có chủ sở hữu cụ thể, Internet không có chủ sở hữu duy nhất.", "Chỉ chính phủ sở hữu Internet.", "Internet thuộc ISP duy nhất.", "Cả hai đều không có chủ sở hữu."], "answer": 0, "explain": "LAN thường thuộc cá nhân/tổ chức; Internet là mạng toàn cầu không thuộc một chủ sở hữu duy nhất."}, {"type": "mcq", "q": "Thiết bị nào gửi dữ liệu ra Internet khi thiết bị nhận không nằm trong LAN?", "options": ["Server", "Hub", "Router", "Switch"], "answer": 2, "explain": "Router định tuyến gói tin giữa các mạng."}, {"type": "mcq", "q": "Google Docs hoặc Zoom thuộc loại dịch vụ đám mây nào?", "options": ["IaaS", "SaaS", "DaaS", "PaaS"], "answer": 1, "explain": "SaaS cung cấp phần mềm qua Internet."}, {"type": "mcq", "q": "Đặc điểm cốt lõi của IoT là gì?", "options": ["Dùng máy tính truy cập web.", "Điều khiển thiết bị bằng nút vật lí.", "Thiết bị thông minh tự động kết nối, thu thập và trao đổi dữ liệu.", "Mạng chỉ dành cho robot."], "answer": 2, "explain": "IoT gồm các thiết bị kết nối và trao đổi dữ liệu qua mạng."}, {"type": "mcq", "q": "Phần mềm nào là ví dụ Trojan?", "options": ["Trò chơi miễn phí bí mật chứa mã độc đánh cắp mật khẩu.", "Mã chèn vào tệp hệ thống.", "Phần mềm diệt virus chính thống.", "Chương trình gửi tin rác."], "answer": 0, "explain": "Trojan giả dạng phần mềm hữu ích nhưng chứa mã độc."}, {"type": "mcq", "q": "Biện pháp cần thiết khi dùng Wi-Fi công cộng là gì?", "options": ["Không đăng nhập thông tin nhạy cảm nếu không có mã hóa.", "Xóa lịch sử duyệt web là đủ.", "Tắt máy ngay.", "Chỉ dùng máy tính cá nhân."], "answer": 0, "explain": "Wi-Fi công cộng có rủi ro nghe lén, cần dùng kết nối mã hóa."}, {"type": "mcq", "q": "Windows Defender cho phép quét tệp/thư mục cụ thể bằng lựa chọn nào?", "options": ["Offline scan", "Full scan", "Custom scan", "Quick scan"], "answer": 2, "explain": "Custom scan cho phép chọn vị trí cần quét."}, {"type": "mcq", "q": "Google Translate dịch tệp .docx hoặc .pdf bằng tính năng nào?", "options": ["Tài liệu", "Camera", "Giọng nói", "Nhập văn bản"], "answer": 0, "explain": "Chế độ Tài liệu hỗ trợ dịch file."}, {"type": "mcq", "q": "Khi bị bắt nạt trên mạng nên làm gì?", "options": ["Tranh luận gay gắt.", "Kết bạn với người lạ để tấn công lại.", "Lưu bằng chứng và báo người lớn/cơ quan chức năng.", "Xóa hết tin nhắn."], "answer": 2, "explain": "Cần lưu bằng chứng và nhờ hỗ trợ phù hợp."}, {"type": "mcq", "q": "Switch trong mạng LAN hoạt động chủ yếu dựa trên địa chỉ nào?", "options": ["IP", "MAC", "URL", "Tên miền"], "answer": 1, "explain": "Switch chuyển tiếp dữ liệu theo địa chỉ MAC."}, {"type": "mcq", "q": "Router chọn đường đi dữ liệu dựa vào địa chỉ nào?", "options": ["MAC", "IP", "Email", "Tên tệp"], "answer": 1, "explain": "Router hoạt động ở tầng mạng và dùng địa chỉ IP."}, {"type": "mcq", "q": "Giao thức nào dùng để phân giải tên miền thành địa chỉ IP?", "options": ["FTP", "DNS", "SMTP", "HTTP"], "answer": 1, "explain": "DNS chuyển tên miền sang địa chỉ IP."}, {"type": "mcq", "q": "Giao thức nào dùng để gửi email?", "options": ["SMTP", "POP3", "IMAP", "DNS"], "answer": 0, "explain": "SMTP là giao thức gửi thư điện tử."}, {"type": "mcq", "q": "Giao thức nào dùng phổ biến để truyền tải dữ liệu web?", "options": ["HTTP/HTTPS", "FTP", "ICMP", "POP3"], "answer": 0, "explain": "HTTP/HTTPS dùng cho web."}, {"type": "mcq", "q": "Lệnh ping thường dùng để làm gì?", "options": ["Tạo thư mục.", "Kiểm tra kết nối tới máy/thiết bị mạng.", "Xóa tệp.", "Dịch tên miền."], "answer": 1, "explain": "Ping dùng ICMP để kiểm tra khả năng kết nối."}, {"type": "mcq", "q": "HTTPS khác HTTP chủ yếu ở điểm nào?", "options": ["Có mã hóa bảo mật.", "Chỉ dùng cho email.", "Không dùng Internet.", "Không có địa chỉ IP."], "answer": 0, "explain": "HTTPS truyền dữ liệu web có mã hóa."}, {"type": "mcq", "q": "Thiết bị nào phát sóng Wi-Fi cho thiết bị không dây?", "options": ["Access Point", "Ổ cứng", "Máy quét", "RAM"], "answer": 0, "explain": "Access Point tạo điểm truy cập không dây."}, {"type": "mcq", "q": "Hub khác Switch ở điểm nào?", "options": ["Hub gửi dữ liệu tới tất cả cổng.", "Hub định tuyến theo IP.", "Hub mã hóa dữ liệu.", "Hub chỉ dùng Wi-Fi."], "answer": 0, "explain": "Hub phát tín hiệu tới mọi cổng, dễ xung đột hơn Switch."}, {"type": "mcq", "q": "Cáp Ethernet thường dùng để làm gì?", "options": ["Kết nối mạng có dây LAN.", "Kết nối âm thanh.", "Sạc pin điện thoại.", "Kết nối màn hình VGA."], "answer": 0, "explain": "Ethernet là chuẩn mạng có dây phổ biến."}, {"type": "mcq", "q": "Địa chỉ IPv4 gồm bao nhiêu bit?", "options": ["16", "32", "64", "128"], "answer": 1, "explain": "IPv4 dài 32 bit."}], "tf": [{"type": "tf", "title": "Mạng LAN và Internet", "items": [{"text": "Router có thể chuyển dữ liệu giữa các mạng.", "answer": true}, {"text": "Switch thường dùng địa chỉ MAC để chuyển tiếp dữ liệu trong LAN.", "answer": true}, {"text": "Internet có một chủ sở hữu duy nhất.", "answer": false}, {"text": "HTTPS có cơ chế bảo mật tốt hơn HTTP.", "answer": true}], "explain": "Nắm chắc vai trò thiết bị mạng và giao thức."}, {"type": "tf", "title": "An toàn mạng", "items": [{"text": "Trojan có thể giả dạng phần mềm hữu ích.", "answer": true}, {"text": "Wi-Fi công cộng luôn an toàn tuyệt đối.", "answer": false}, {"text": "Custom scan cho phép quét vị trí do người dùng chọn.", "answer": true}, {"text": "DNS dùng để gửi email.", "answer": false}], "explain": "Cần kết hợp kiến thức mạng và bảo mật."}]}, {"code": "C", "name": "Tổ chức lưu trữ và khai thác thông tin", "questions": [{"type": "mcq", "q": "Google Drive là dịch vụ gì?", "options": ["Lưu trữ đám mây", "Diệt virus", "Soạn thảo offline duy nhất", "Trình duyệt"], "answer": 0, "explain": "Google Drive giúp lưu trữ và chia sẻ tệp trên đám mây."}, {"type": "mcq", "q": "Trong Google Drive, quyền nào cho phép sửa nội dung tệp?", "options": ["Viewer", "Commenter", "Editor", "Restricted"], "answer": 2, "explain": "Editor có quyền chỉnh sửa."}, {"type": "mcq", "q": "Để tìm chính xác một cụm từ trên Google, nên dùng kí hiệu nào?", "options": ["Dấu ngoặc kép", "Dấu cộng ở cuối", "Dấu chấm than", "Viết hoa"], "answer": 0, "explain": "Dấu ngoặc kép tìm đúng cụm từ."}, {"type": "mcq", "q": "Nhãn trong Gmail khác thư mục truyền thống ở điểm nào?", "options": ["Một thư có thể gán nhiều nhãn.", "Nhãn luôn xóa thư.", "Nhãn chỉ trả phí.", "Nhãn không sắp xếp được thư."], "answer": 0, "explain": "Một email có thể mang nhiều nhãn."}, {"type": "mcq", "q": "Tệp và thư mục trong thiết bị số thường được tổ chức theo cấu trúc nào?", "options": ["Phân cấp hình cây", "Vòng tròn", "Ngẫu nhiên hoàn toàn", "Một danh sách duy nhất"], "answer": 0, "explain": "Hệ thống tệp thường có thư mục gốc, thư mục con và tệp."}, {"type": "mcq", "q": "Công cụ tìm kiếm dùng để làm gì?", "options": ["Tìm thông tin trên Internet", "Tăng dung lượng RAM", "Xóa virus", "Cài hệ điều hành"], "answer": 0, "explain": "Search engine giúp tìm kiếm thông tin trực tuyến."}, {"type": "mcq", "q": "Cú pháp filetype:pdf trên Google dùng để làm gì?", "options": ["Tìm tệp PDF", "Dịch văn bản", "Xóa tệp", "Gửi email"], "answer": 0, "explain": "filetype: giới hạn loại tệp cần tìm."}, {"type": "mcq", "q": "Dữ liệu lưu trên đám mây có ưu điểm gì?", "options": ["Truy cập từ nhiều thiết bị có Internet", "Không bao giờ cần bảo mật", "Không cần tài khoản", "Không thể chia sẻ"], "answer": 0, "explain": "Lưu trữ đám mây giúp truy cập và chia sẻ linh hoạt."}, {"type": "mcq", "q": "Sao lưu dữ liệu có mục đích chính là gì?", "options": ["Phòng mất dữ liệu", "Tăng độ sáng màn hình", "Tăng FPS", "Đổi mật khẩu Wi-Fi"], "answer": 0, "explain": "Backup giúp khôi phục khi dữ liệu bị mất/hỏng."}, {"type": "mcq", "q": "Metadata của tệp thường cho biết gì?", "options": ["Thông tin mô tả như tên, kích thước, ngày sửa", "Nội dung duy nhất của tệp", "Mật khẩu Wi-Fi", "Địa chỉ MAC"], "answer": 0, "explain": "Metadata mô tả dữ liệu."}, {"type": "mcq", "q": "Cơ sở dữ liệu dùng để làm gì?", "options": ["Lưu trữ và quản lí dữ liệu có tổ chức", "Tạo hiệu ứng ảnh", "Kết nối loa", "Vẽ vector"], "answer": 0, "explain": "CSDL giúp lưu trữ, tìm kiếm, cập nhật dữ liệu."}, {"type": "mcq", "q": "Khóa chính trong bảng dữ liệu dùng để làm gì?", "options": ["Xác định duy nhất mỗi bản ghi", "Tô màu bảng", "Tạo mật khẩu tệp", "Sắp xếp chữ đẹp"], "answer": 0, "explain": "Primary key phân biệt các bản ghi."}, {"type": "mcq", "q": "Truy vấn dữ liệu có vai trò gì?", "options": ["Khai thác, lọc, tìm thông tin từ CSDL", "Thay card màn hình", "Xóa hệ điều hành", "Kết nối Bluetooth"], "answer": 0, "explain": "Query giúp lấy thông tin cần thiết từ CSDL."}, {"type": "mcq", "q": "Trong bảng dữ liệu, hàng thường biểu diễn gì?", "options": ["Một bản ghi", "Một kiểu chữ", "Một màu", "Một giao thức"], "answer": 0, "explain": "Mỗi hàng là một bản ghi/đối tượng."}, {"type": "mcq", "q": "Trong bảng dữ liệu, cột thường biểu diễn gì?", "options": ["Một trường/thuộc tính", "Một người dùng duy nhất", "Một trang web", "Một mạng LAN"], "answer": 0, "explain": "Cột là trường dữ liệu."}, {"type": "mcq", "q": "Khi chia sẻ tệp công khai, cần chú ý điều gì?", "options": ["Không chia sẻ dữ liệu nhạy cảm", "Luôn bật quyền sửa cho mọi người", "Không cần kiểm tra quyền", "Xóa bản gốc"], "answer": 0, "explain": "Cần bảo vệ dữ liệu cá nhân và tài liệu quan trọng."}, {"type": "mcq", "q": "Lọc dữ liệu trong bảng tính giúp gì?", "options": ["Hiển thị các dòng thỏa điều kiện", "Xóa toàn bộ bảng", "Đổi ngôn ngữ máy tính", "Cài driver"], "answer": 0, "explain": "Filter giúp khai thác dữ liệu nhanh."}, {"type": "mcq", "q": "Sắp xếp dữ liệu theo thứ tự tăng dần nghĩa là gì?", "options": ["Từ nhỏ đến lớn/A đến Z", "Từ lớn đến nhỏ", "Xóa trùng lặp", "Ẩn dữ liệu"], "answer": 0, "explain": "Ascending là tăng dần."}, {"type": "mcq", "q": "Dữ liệu có cấu trúc là gì?", "options": ["Dữ liệu tổ chức theo mô hình rõ ràng như bảng", "Dữ liệu ngẫu nhiên", "Ảnh không tên", "Âm thanh chưa lưu"], "answer": 0, "explain": "Dữ liệu có cấu trúc dễ lưu trữ và truy vấn."}, {"type": "mcq", "q": "Khai thác thông tin hiệu quả cần điều gì?", "options": ["Nguồn tin đáng tin cậy và tiêu chí tìm kiếm rõ", "Chỉ xem tiêu đề", "Chia sẻ ngay mọi thông tin", "Không cần kiểm chứng"], "answer": 0, "explain": "Cần đánh giá nguồn và kiểm chứng thông tin."}], "tf": [{"type": "tf", "title": "Lưu trữ và khai thác", "items": [{"text": "Google Drive là dịch vụ lưu trữ đám mây.", "answer": true}, {"text": "Một email có thể gán nhiều nhãn trong Gmail.", "answer": true}, {"text": "Dấu ngoặc kép giúp tìm chính xác cụm từ.", "answer": true}, {"text": "Chia sẻ quyền Editor cho mọi người luôn an toàn.", "answer": false}], "explain": "Khai thác thông tin cần đúng công cụ và đúng quyền chia sẻ."}, {"type": "tf", "title": "Cơ sở dữ liệu", "items": [{"text": "Khóa chính xác định duy nhất bản ghi.", "answer": true}, {"text": "Truy vấn giúp khai thác dữ liệu.", "answer": true}, {"text": "Mỗi cột thường biểu diễn một bản ghi.", "answer": false}, {"text": "Dữ liệu có cấu trúc thường dễ tìm kiếm hơn.", "answer": true}], "explain": "CSDL giúp tổ chức, tìm kiếm và quản lí dữ liệu."}]}, {"code": "D", "name": "Đạo đức, pháp luật và văn hóa trong môi trường số", "questions": [{"type": "mcq", "q": "Hành vi nào thể hiện tôn trọng quyền riêng tư?", "options": ["Không đăng ảnh người khác khi chưa được phép", "Chia sẻ mật khẩu bạn bè", "Đọc trộm email", "Phát tán tin nhắn riêng"], "answer": 0, "explain": "Quyền riêng tư cần được tôn trọng trong môi trường số."}, {"type": "mcq", "q": "Khi gặp thông tin sai sự thật trên mạng, nên làm gì?", "options": ["Báo cáo/kiểm chứng, không chia sẻ", "Chia sẻ ngay", "Bình luận hùa theo", "Lưu để phát tán sau"], "answer": 0, "explain": "Không lan truyền tin giả."}, {"type": "mcq", "q": "Bản quyền số liên quan đến điều gì?", "options": ["Quyền của tác giả với sản phẩm số", "Tốc độ Internet", "Dung lượng RAM", "Địa chỉ IP"], "answer": 0, "explain": "Tác phẩm số vẫn được bảo hộ bản quyền."}, {"type": "mcq", "q": "Deepfake có thể gây nguy cơ gì?", "options": ["Giả mạo danh tính, lừa đảo", "Tăng tốc máy tính", "Tạo thư mục", "Sửa lỗi mạng"], "answer": 0, "explain": "Deepfake dễ bị lạm dụng để lừa đảo hoặc bôi nhọ."}, {"type": "mcq", "q": "Mật khẩu mạnh nên có đặc điểm nào?", "options": ["Dài, khó đoán, có chữ hoa/thường/số/kí tự đặc biệt", "Là ngày sinh", "Là 123456", "Dùng chung mọi tài khoản"], "answer": 0, "explain": "Mật khẩu mạnh giảm nguy cơ bị chiếm tài khoản."}, {"type": "mcq", "q": "Phishing là hình thức gì?", "options": ["Lừa đảo đánh cắp thông tin", "Nén ảnh", "Quét virus", "Tạo bảng tính"], "answer": 0, "explain": "Phishing thường giả mạo trang/tổ chức để lấy dữ liệu."}, {"type": "mcq", "q": "Khi bị bắt nạt trên mạng, cách xử lí phù hợp là gì?", "options": ["Lưu bằng chứng và nhờ người lớn hỗ trợ", "Tấn công lại", "Im lặng chịu đựng mãi", "Chia sẻ dữ liệu cá nhân của người bắt nạt"], "answer": 0, "explain": "Cần tìm sự hỗ trợ và bảo vệ đúng cách."}, {"type": "mcq", "q": "Ứng xử văn minh trên mạng là gì?", "options": ["Tôn trọng, lịch sự, không xúc phạm", "Dùng ngôn từ kích động", "Spam liên tục", "Đăng tin chưa kiểm chứng"], "answer": 0, "explain": "Văn hóa số yêu cầu thái độ tôn trọng."}, {"type": "mcq", "q": "Thông tin cá nhân nhạy cảm nên được xử lí thế nào?", "options": ["Hạn chế công khai", "Đăng công khai", "Gửi cho người lạ", "Dùng làm mật khẩu"], "answer": 0, "explain": "Cần bảo vệ dữ liệu cá nhân."}, {"type": "mcq", "q": "Sử dụng phần mềm bẻ khóa có thể vi phạm gì?", "options": ["Bản quyền phần mềm", "Tốc độ CPU", "Dung lượng ổ cứng", "Giao thức DNS"], "answer": 0, "explain": "Crack phần mềm vi phạm bản quyền và tiềm ẩn mã độc."}, {"type": "mcq", "q": "Khi dùng AI để học tập, hành vi nào phù hợp?", "options": ["Dùng để tham khảo và tự hiểu bài", "Sao chép nguyên văn nộp bài", "Dùng tạo thông tin giả", "Giả mạo tác giả"], "answer": 0, "explain": "AI nên hỗ trợ học tập, không thay thế sự trung thực."}, {"type": "mcq", "q": "Tin giả thường nguy hiểm vì sao?", "options": ["Gây hiểu lầm và ảnh hưởng xã hội", "Tăng tốc Internet", "Tăng bộ nhớ", "Không ai đọc"], "answer": 0, "explain": "Tin giả gây hậu quả cho cá nhân và cộng đồng."}, {"type": "mcq", "q": "Quyền tác giả phát sinh khi nào?", "options": ["Khi tác phẩm được sáng tạo và thể hiện dưới hình thức nhất định", "Chỉ khi đăng Facebook", "Chỉ khi bán tác phẩm", "Khi có nhiều lượt xem"], "answer": 0, "explain": "Tác phẩm được thể hiện có thể được bảo hộ."}, {"type": "mcq", "q": "Creative Commons là gì?", "options": ["Hệ thống giấy phép chia sẻ tác phẩm có điều kiện", "Phần mềm diệt virus", "Trình duyệt", "Mạng xã hội"], "answer": 0, "explain": "CC cho phép tác giả quy định cách người khác sử dụng tác phẩm."}, {"type": "mcq", "q": "Không gian mạng là gì?", "options": ["Môi trường giao tiếp dựa trên công nghệ số và nền tảng trực tuyến", "Phòng máy tính", "Ổ cứng", "Màn hình"], "answer": 0, "explain": "Không gian mạng là môi trường giao tiếp số."}, {"type": "mcq", "q": "Việc công khai số điện thoại của người khác khi chưa cho phép là gì?", "options": ["Xâm phạm quyền riêng tư", "Hành vi bắt buộc", "Bảo mật tốt", "Không ảnh hưởng"], "answer": 0, "explain": "Đây là hành vi không tôn trọng dữ liệu cá nhân."}, {"type": "mcq", "q": "Khi tải tài liệu trên mạng, cần lưu ý gì?", "options": ["Nguồn gốc và giấy phép sử dụng", "Chỉ cần tải được", "Không cần trích nguồn", "Luôn sửa tên tác giả"], "answer": 0, "explain": "Cần tuân thủ bản quyền và trích dẫn."}, {"type": "mcq", "q": "Mã độc có thể lây qua đâu?", "options": ["Tệp đính kèm/link không an toàn", "Màn hình sáng", "Bàn phím mới", "Chuột không dây luôn an toàn"], "answer": 0, "explain": "Link/tệp lạ có thể chứa mã độc."}, {"type": "mcq", "q": "Xác thực hai yếu tố giúp gì?", "options": ["Tăng bảo mật tài khoản", "Tăng độ phân giải", "Tăng dung lượng tệp", "Tắt mạng"], "answer": 0, "explain": "2FA thêm lớp bảo vệ ngoài mật khẩu."}, {"type": "mcq", "q": "Văn hóa số tốt cần dựa trên điều gì?", "options": ["Tôn trọng, trách nhiệm, an toàn và hợp pháp", "Ẩn danh để xúc phạm", "Chia sẻ mọi thứ", "Tải phần mềm lậu"], "answer": 0, "explain": "Công dân số cần có trách nhiệm."}], "tf": [{"type": "tf", "title": "Văn hóa số", "items": [{"text": "Không đăng ảnh người khác khi chưa được phép là tôn trọng quyền riêng tư.", "answer": true}, {"text": "Tin giả nên được chia sẻ nhanh để nhiều người biết.", "answer": false}, {"text": "Phishing có thể đánh cắp thông tin cá nhân.", "answer": true}, {"text": "Dùng phần mềm bẻ khóa là hành vi an toàn và hợp pháp.", "answer": false}], "explain": "Công dân số cần tôn trọng, an toàn và hợp pháp."}, {"type": "tf", "title": "Đạo đức AI", "items": [{"text": "Deepfake có thể bị lợi dụng để lừa đảo.", "answer": true}, {"text": "AI luôn công bằng trong mọi trường hợp.", "answer": false}, {"text": "Dữ liệu cá nhân cần được bảo vệ.", "answer": true}, {"text": "Sao chép nguyên văn bài AI tạo ra để nộp luôn là học tập trung thực.", "answer": false}], "explain": "Dùng AI cần minh bạch và có trách nhiệm."}]}, {"code": "E", "name": "Ứng dụng tin học", "questions": [{"type": "mcq", "q": "Ứng dụng nào dùng để soạn thảo văn bản trực tuyến?", "options": ["Google Docs", "BIOS", "Router", "CMD"], "answer": 0, "explain": "Google Docs là công cụ soạn thảo trực tuyến."}, {"type": "mcq", "q": "Google Sheets là ví dụ của loại phần mềm nào?", "options": ["SaaS", "Hệ điều hành", "Driver", "Firmware"], "answer": 0, "explain": "Google Sheets chạy trên Internet theo mô hình SaaS."}, {"type": "mcq", "q": "Trong trình chiếu, hiệu ứng chuyển trang gọi là gì?", "options": ["Transition", "Filter", "Query", "Protocol"], "answer": 0, "explain": "Transition là hiệu ứng chuyển slide."}, {"type": "mcq", "q": "Canva thường dùng để làm gì?", "options": ["Thiết kế đồ họa", "Quét virus", "Định tuyến mạng", "Nén ổ đĩa"], "answer": 0, "explain": "Canva là công cụ thiết kế trực tuyến."}, {"type": "mcq", "q": "Trong bảng tính, hàm SUM dùng để làm gì?", "options": ["Tính tổng", "Tính trung bình", "Đếm chữ", "Tìm kiếm web"], "answer": 0, "explain": "SUM cộng các giá trị."}, {"type": "mcq", "q": "Hàm AVERAGE dùng để làm gì?", "options": ["Tính trung bình", "Tính tổng", "Đếm số ô trống", "Đổi màu"], "answer": 0, "explain": "AVERAGE trả về giá trị trung bình."}, {"type": "mcq", "q": "PowerPoint dùng chủ yếu để làm gì?", "options": ["Tạo bài trình chiếu", "Quản lí mạng", "Lập trình Python", "Dịch tên miền"], "answer": 0, "explain": "PowerPoint là phần mềm trình chiếu."}, {"type": "mcq", "q": "Để chia sẻ tài liệu trực tuyến cho người khác xem, nên chọn quyền nào?", "options": ["Viewer", "Editor cho tất cả", "Owner", "Admin hệ thống"], "answer": 0, "explain": "Viewer chỉ cho xem, an toàn hơn khi không cần sửa."}, {"type": "mcq", "q": "Trong xử lí ảnh, độ phân giải ảnh thường liên quan đến gì?", "options": ["Số điểm ảnh", "Tốc độ CPU", "Mật khẩu", "Địa chỉ IP"], "answer": 0, "explain": "Độ phân giải biểu thị số pixel."}, {"type": "mcq", "q": "Định dạng ảnh PNG có ưu điểm gì?", "options": ["Hỗ trợ nền trong suốt", "Chỉ chứa âm thanh", "Không hiển thị trên web", "Là tệp văn bản"], "answer": 0, "explain": "PNG hỗ trợ transparency."}, {"type": "mcq", "q": "Video editing là gì?", "options": ["Biên tập, cắt ghép và xử lí video", "Tạo bảng dữ liệu", "Quét mạng", "Đổi RAM"], "answer": 0, "explain": "Biên tập video xử lí nội dung hình ảnh động và âm thanh."}, {"type": "mcq", "q": "Trong Word, mục lục tự động dựa vào gì?", "options": ["Heading Styles", "Màu nền", "Tên file", "Kích thước ảnh"], "answer": 0, "explain": "Heading giúp Word tạo mục lục tự động."}, {"type": "mcq", "q": "Mail merge dùng để làm gì?", "options": ["Trộn thư", "Nén ảnh", "Quét virus", "Tạo mật khẩu"], "answer": 0, "explain": "Mail Merge tạo nhiều thư/giấy mời theo danh sách."}, {"type": "mcq", "q": "Trong Excel, biểu đồ giúp gì?", "options": ["Trực quan hóa dữ liệu", "Tăng RAM", "Tạo router", "Dịch email"], "answer": 0, "explain": "Chart giúp nhìn xu hướng và so sánh dữ liệu."}, {"type": "mcq", "q": "Phần mềm trình chiếu nên có đặc điểm gì?", "options": ["Nội dung ngắn gọn, hình ảnh phù hợp", "Chữ thật nhỏ", "Quá nhiều hiệu ứng", "Không có tiêu đề"], "answer": 0, "explain": "Slide tốt cần rõ ràng, trực quan."}, {"type": "mcq", "q": "Google Forms dùng để làm gì?", "options": ["Tạo biểu mẫu khảo sát/kiểm tra", "Cài Windows", "Nối mạng", "Thiết kế CPU"], "answer": 0, "explain": "Forms tạo biểu mẫu thu thập phản hồi."}, {"type": "mcq", "q": "Trong thiết kế đồ họa, màu RGB thường dùng cho môi trường nào?", "options": ["Màn hình số", "In offset truyền thống", "Khắc gỗ", "Máy cơ khí"], "answer": 0, "explain": "RGB dùng cho hiển thị số."}, {"type": "mcq", "q": "Trong thiết kế, bố cục tốt giúp gì?", "options": ["Truyền đạt thông tin rõ ràng", "Làm file lỗi", "Giảm bảo mật", "Xóa dữ liệu"], "answer": 0, "explain": "Bố cục giúp người xem dễ tiếp nhận nội dung."}, {"type": "mcq", "q": "Ứng dụng tin học trong giáo dục gồm ví dụ nào?", "options": ["LMS, bài giảng số, kiểm tra online", "Chỉ dùng phấn trắng", "Không dùng thiết bị", "Tắt Internet"], "answer": 0, "explain": "Tin học hỗ trợ dạy học số."}, {"type": "mcq", "q": "AI hỗ trợ ứng dụng văn phòng bằng cách nào?", "options": ["Gợi ý nội dung, tóm tắt, phân tích dữ liệu", "Thay bo mạch", "Tăng điện áp", "Xóa hệ điều hành"], "answer": 0, "explain": "AI giúp tăng hiệu quả xử lí công việc văn phòng."}], "tf": [{"type": "tf", "title": "Ứng dụng văn phòng", "items": [{"text": "Google Docs là công cụ soạn thảo trực tuyến.", "answer": true}, {"text": "SUM dùng để tính tổng.", "answer": true}, {"text": "PowerPoint chủ yếu dùng để tạo bài trình chiếu.", "answer": true}, {"text": "Slide hiệu quả nên chứa thật nhiều chữ nhỏ.", "answer": false}], "explain": "Ứng dụng tin học giúp xử lí công việc hiệu quả."}, {"type": "tf", "title": "Thiết kế số", "items": [{"text": "Canva hỗ trợ thiết kế đồ họa.", "answer": true}, {"text": "PNG có thể hỗ trợ nền trong suốt.", "answer": true}, {"text": "RGB thường dùng cho màn hình số.", "answer": true}, {"text": "Bố cục không ảnh hưởng đến truyền đạt thông tin.", "answer": false}], "explain": "Thiết kế số cần rõ ràng, thẩm mĩ và phù hợp mục tiêu."}]}, {"code": "F", "name": "Giải quyết vấn đề với sự trợ giúp của máy tính", "questions": [{"type": "mcq", "q": "HTML dùng để làm gì?", "options": ["Tạo cấu trúc trang web", "Định tuyến mạng", "Chống virus", "Lưu điện"], "answer": 0, "explain": "HTML là ngôn ngữ đánh dấu xây dựng cấu trúc web."}, {"type": "mcq", "q": "CSS dùng để làm gì?", "options": ["Định dạng giao diện trang web", "Tạo địa chỉ IP", "Gửi email", "Nén dữ liệu"], "answer": 0, "explain": "CSS điều khiển màu sắc, bố cục, font chữ."}, {"type": "mcq", "q": "JavaScript chủ yếu dùng để làm gì trên web?", "options": ["Tạo tương tác", "Cắm dây mạng", "Lưu ảnh", "Quét ổ cứng"], "answer": 0, "explain": "JavaScript xử lí hành vi và tương tác."}, {"type": "mcq", "q": "Thẻ HTML nào tạo liên kết?", "options": ["<a>", "<p>", "<img>", "<table>"], "answer": 0, "explain": "Thẻ a tạo hyperlink."}, {"type": "mcq", "q": "Thuộc tính CSS nào đổi màu chữ?", "options": ["color", "background-color", "border", "margin"], "answer": 0, "explain": "color đặt màu văn bản."}, {"type": "mcq", "q": "Thuộc tính CSS nào đổi màu nền?", "options": ["background-color", "font-size", "text-align", "href"], "answer": 0, "explain": "background-color đặt màu nền."}, {"type": "mcq", "q": "Bộ chọn class trong CSS bắt đầu bằng kí hiệu nào?", "options": [".", "#", ":", "::"], "answer": 0, "explain": "Class selector dùng dấu chấm."}, {"type": "mcq", "q": "Bộ chọn id trong CSS bắt đầu bằng kí hiệu nào?", "options": ["#", ".", ":", ">"], "answer": 0, "explain": "ID selector dùng dấu #."}, {"type": "mcq", "q": "Trong Python, câu lệnh if dùng để làm gì?", "options": ["Rẽ nhánh điều kiện", "Lặp vô hạn luôn luôn", "Tạo ảnh", "Kết nối dây"], "answer": 0, "explain": "if kiểm tra điều kiện để chọn nhánh xử lí."}, {"type": "mcq", "q": "Vòng lặp for thường dùng khi nào?", "options": ["Lặp qua dãy/phạm vi xác định", "Chỉ nhập dữ liệu", "Tắt chương trình", "Tạo ổ cứng"], "answer": 0, "explain": "for lặp trên iterable hoặc range."}, {"type": "mcq", "q": "Danh sách trong Python được viết bằng dấu nào?", "options": ["[ ]", "{ }", "( )", "< >"], "answer": 0, "explain": "List dùng cặp ngoặc vuông."}, {"type": "mcq", "q": "Thuật toán là gì?", "options": ["Dãy hữu hạn các bước giải quyết bài toán", "Tên mạng Wi-Fi", "Một loại màn hình", "Phần cứng"], "answer": 0, "explain": "Thuật toán mô tả cách giải bài toán."}, {"type": "mcq", "q": "Sơ đồ khối dùng hình thoi để biểu diễn gì?", "options": ["Điều kiện/rẽ nhánh", "Bắt đầu/kết thúc", "Nhập xuất", "Xử lí thường"], "answer": 0, "explain": "Hình thoi biểu diễn quyết định điều kiện."}, {"type": "mcq", "q": "Trong CSS, padding là gì?", "options": ["Khoảng cách từ nội dung đến viền", "Khoảng ngoài viền", "Màu chữ", "Địa chỉ liên kết"], "answer": 0, "explain": "Padding là khoảng đệm bên trong."}, {"type": "mcq", "q": "Trong CSS, margin là gì?", "options": ["Khoảng cách bên ngoài viền", "Khoảng trong nội dung", "Màu nền", "Kiểu dữ liệu"], "answer": 0, "explain": "Margin là khoảng cách ngoài phần tử."}, {"type": "mcq", "q": "Biểu mẫu HTML dùng thẻ nào?", "options": ["<form>", "<table>", "<body>", "<title>"], "answer": 0, "explain": "form thu thập dữ liệu người dùng."}, {"type": "mcq", "q": "Nút gửi biểu mẫu thường có type nào?", "options": ["submit", "button-only", "send", "ok"], "answer": 0, "explain": "type='submit' gửi dữ liệu form."}, {"type": "mcq", "q": "Trong HTML, thẻ img dùng thuộc tính nào để chỉ đường dẫn ảnh?", "options": ["src", "href", "alt-only", "class"], "answer": 0, "explain": "src chứa nguồn ảnh."}, {"type": "mcq", "q": "Khi giải quyết vấn đề bằng máy tính, bước đầu tiên thường là gì?", "options": ["Xác định bài toán", "Viết code ngay", "Xóa dữ liệu", "Đổi màn hình"], "answer": 0, "explain": "Cần hiểu đầu vào, đầu ra, yêu cầu."}, {"type": "mcq", "q": "Kiểm thử chương trình nhằm mục đích gì?", "options": ["Phát hiện lỗi và kiểm tra kết quả", "Tăng điện áp", "Đổi màu bàn phím", "Mua phần cứng"], "answer": 0, "explain": "Testing giúp đảm bảo chương trình đúng."}], "tf": [{"type": "tf", "title": "HTML/CSS", "items": [{"text": "HTML tạo cấu trúc trang web.", "answer": true}, {"text": "CSS dùng để định dạng giao diện.", "answer": true}, {"text": "Bộ chọn class bắt đầu bằng dấu #.", "answer": false}, {"text": "Thẻ form dùng để thu thập dữ liệu.", "answer": true}], "explain": "Cần phân biệt vai trò HTML, CSS và biểu mẫu."}, {"type": "tf", "title": "Thuật toán và lập trình", "items": [{"text": "Thuật toán là dãy hữu hạn bước giải quyết bài toán.", "answer": true}, {"text": "Câu lệnh if dùng để rẽ nhánh.", "answer": true}, {"text": "Kiểm thử giúp phát hiện lỗi.", "answer": true}, {"text": "Vòng lặp for không bao giờ cần điều kiện/dãy lặp.", "answer": false}], "explain": "Tư duy thuật toán là nền tảng giải quyết vấn đề."}]}, {"code": "G", "name": "Hướng nghiệp với Tin học", "questions": [{"type": "mcq", "q": "Nghề phát triển phần mềm chủ yếu làm gì?", "options": ["Thiết kế, lập trình, kiểm thử phần mềm", "Lắp cáp điện", "Vận hành máy cơ khí", "Trồng cây"], "answer": 0, "explain": "Software developer xây dựng và bảo trì phần mềm."}, {"type": "mcq", "q": "Nghề quản trị mạng cần kiến thức nào?", "options": ["Thiết bị mạng, giao thức, bảo mật", "Nấu ăn", "May mặc", "Hội họa truyền thống duy nhất"], "answer": 0, "explain": "Quản trị mạng cần hiểu mạng và an toàn hệ thống."}, {"type": "mcq", "q": "An ninh mạng tập trung vào nhiệm vụ gì?", "options": ["Bảo vệ hệ thống và dữ liệu khỏi tấn công", "Tạo slide", "In tài liệu", "Thiết kế nội thất"], "answer": 0, "explain": "Cybersecurity bảo vệ tài sản số."}, {"type": "mcq", "q": "Thiết kế đồ họa máy tính cần năng lực nào?", "options": ["Thẩm mĩ, sáng tạo và sử dụng công cụ thiết kế", "Chỉ thuộc công thức toán", "Không cần máy tính", "Chỉ lắp phần cứng"], "answer": 0, "explain": "Thiết kế đồ họa kết hợp nghệ thuật và công nghệ."}, {"type": "mcq", "q": "Khoa học dữ liệu liên quan đến công việc nào?", "options": ["Phân tích dữ liệu để rút ra thông tin hữu ích", "Sửa xe máy", "Xây gạch", "Dệt vải"], "answer": 0, "explain": "Data science khai thác dữ liệu phục vụ quyết định."}, {"type": "mcq", "q": "AI Engineer cần kiến thức nào?", "options": ["Lập trình, dữ liệu, học máy", "Chỉ gõ văn bản", "Chỉ vẽ tay", "Không cần toán"], "answer": 0, "explain": "Kĩ sư AI cần nền tảng lập trình và mô hình học máy."}, {"type": "mcq", "q": "Nghề sửa chữa, bảo trì máy tính làm gì?", "options": ["Cài đặt, bảo trì phần cứng/phần mềm, xử lí sự cố", "Dự báo thời tiết", "Viết tiểu thuyết", "Dạy nhạc"], "answer": 0, "explain": "Nghề này đảm bảo máy tính hoạt động ổn định."}, {"type": "mcq", "q": "Kĩ năng nào quan trọng với nghề CNTT?", "options": ["Tự học và giải quyết vấn đề", "Không giao tiếp", "Không cập nhật", "Chỉ làm việc một mình"], "answer": 0, "explain": "CNTT thay đổi nhanh nên tự học rất quan trọng."}, {"type": "mcq", "q": "Nhóm nghề quản trị CNTT gồm công việc nào?", "options": ["Quản trị mạng, hệ thống, bảo mật", "Chỉ bán hàng", "Chỉ quay phim", "Chỉ in ấn"], "answer": 0, "explain": "Quản trị CNTT duy trì hệ thống hoạt động an toàn."}, {"type": "mcq", "q": "Nhu cầu nhân lực CNTT tăng do đâu?", "options": ["Chuyển đổi số và phát triển công nghệ", "Ít dùng Internet", "Máy tính biến mất", "Không cần dữ liệu"], "answer": 0, "explain": "Chuyển đổi số làm tăng nhu cầu nhân lực."}, {"type": "mcq", "q": "Người làm CNTT cần tuân thủ điều gì?", "options": ["Đạo đức nghề nghiệp và pháp luật", "Chia sẻ dữ liệu mật", "Dùng phần mềm lậu", "Bỏ qua bảo mật"], "answer": 0, "explain": "CNTT liên quan trực tiếp dữ liệu và an toàn."}, {"type": "mcq", "q": "Nghề phát triển web cần biết gì?", "options": ["HTML, CSS, JavaScript và tư duy thiết kế", "Chỉ dùng máy in", "Không cần Internet", "Chỉ dùng Excel"], "answer": 0, "explain": "Web developer xây dựng ứng dụng/trang web."}, {"type": "mcq", "q": "Tester phần mềm làm nhiệm vụ gì?", "options": ["Kiểm thử, phát hiện lỗi, đảm bảo chất lượng", "Sửa nguồn điện", "Lắp màn hình", "Thiết kế áo"], "answer": 0, "explain": "Tester kiểm tra phần mềm theo yêu cầu."}, {"type": "mcq", "q": "UI/UX Designer quan tâm đến điều gì?", "options": ["Trải nghiệm và giao diện người dùng", "Cấu tạo CPU", "Địa chỉ IP công cộng", "Dây nguồn"], "answer": 0, "explain": "UI/UX giúp sản phẩm dễ dùng và hấp dẫn."}, {"type": "mcq", "q": "Chuyên viên hỗ trợ kĩ thuật cần kĩ năng nào?", "options": ["Giao tiếp và xử lí sự cố", "Không cần lắng nghe", "Không cần kiến thức máy tính", "Chỉ làm quảng cáo"], "answer": 0, "explain": "Support cần hiểu vấn đề người dùng và hướng dẫn rõ."}, {"type": "mcq", "q": "Ngành học phù hợp với an ninh mạng là gì?", "options": ["An toàn thông tin", "Thú y", "Du lịch", "Âm nhạc"], "answer": 0, "explain": "An toàn thông tin đào tạo bảo mật hệ thống."}, {"type": "mcq", "q": "Nghề quản trị cơ sở dữ liệu làm gì?", "options": ["Quản lí, bảo vệ và tối ưu dữ liệu", "Vẽ tranh", "Sửa đường", "Đóng gói hàng"], "answer": 0, "explain": "DBA quản lí hệ CSDL."}, {"type": "mcq", "q": "Freelancer CNTT là gì?", "options": ["Làm việc tự do theo dự án", "Chỉ làm trong cơ quan nhà nước", "Không nhận dự án", "Không dùng Internet"], "answer": 0, "explain": "Freelancer nhận việc linh hoạt theo hợp đồng/dự án."}, {"type": "mcq", "q": "Học sinh muốn theo CNTT nên chuẩn bị gì?", "options": ["Tư duy logic, tiếng Anh, lập trình cơ bản, tự học", "Chỉ chơi game", "Không cần học toán", "Không cần thực hành"], "answer": 0, "explain": "Nền tảng tốt giúp học CNTT hiệu quả."}, {"type": "mcq", "q": "Xu hướng nghề nghiệp CNTT hiện nay là gì?", "options": ["AI, dữ liệu, an ninh mạng, cloud", "Giảm hoàn toàn nhu cầu", "Không dùng phần mềm", "Chỉ sửa máy cơ"], "answer": 0, "explain": "Các lĩnh vực mới đang có nhu cầu nhân lực lớn."}], "tf": [{"type": "tf", "title": "Nghề CNTT", "items": [{"text": "Nghề quản trị mạng cần hiểu thiết bị mạng và bảo mật.", "answer": true}, {"text": "An ninh mạng bảo vệ hệ thống và dữ liệu.", "answer": true}, {"text": "Người làm CNTT không cần tự học.", "answer": false}, {"text": "Chuyển đổi số làm tăng nhu cầu nhân lực CNTT.", "answer": true}], "explain": "Hướng nghiệp CNTT cần gắn với xu thế số."}, {"type": "tf", "title": "Kĩ năng nghề nghiệp", "items": [{"text": "Tester kiểm thử và phát hiện lỗi phần mềm.", "answer": true}, {"text": "UI/UX quan tâm đến trải nghiệm người dùng.", "answer": true}, {"text": "AI Engineer cần kiến thức dữ liệu và học máy.", "answer": true}, {"text": "Làm CNTT không cần tuân thủ đạo đức nghề nghiệp.", "answer": false}], "explain": "Kĩ năng chuyên môn cần đi cùng đạo đức và khả năng học suốt đời."}]}];
+let current = null;
+let currentMode = "";
+let currentQuestions = [];
+
+function $(id){return document.getElementById(id)}
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5)}
+function sample(arr,n){return shuffle(arr).slice(0,n)}
+
+function loadStats(){
+  const s = JSON.parse(localStorage.getItem("tinStats")||'{"done":0,"correct":0,"tests":0}');
+  $("stDone").textContent=s.done;
+  $("stCorrect").textContent=s.correct;
+  $("stRate").textContent=s.done?Math.round(s.correct/s.done*100)+"%":"0%";
+  $("stTests").textContent=s.tests;
+}
+function saveStats(done, correct){
+  const s = JSON.parse(localStorage.getItem("tinStats")||'{"done":0,"correct":0,"tests":0}');
+  s.done += done; s.correct += correct; s.tests += 1;
+  localStorage.setItem("tinStats", JSON.stringify(s)); loadStats();
+}
+function resetProgress(){localStorage.removeItem("tinStats"); loadStats(); alert("Đã xóa thống kê học tập.");}
+
+function renderTopics(){
+  $("topicGrid").innerHTML = TOPICS.map(t=>`
+    <div class="card topic">
+      <div class="code">${t.code}</div>
+      <h3>Chủ đề ${t.code}. ${t.name}</h3>
+      <p>${t.questions.length} câu trắc nghiệm · ${t.tf.length} nhóm Đúng/Sai</p>
+      <div class="btns">
+        <button onclick="startTopic('${t.code}')">Luyện trắc nghiệm</button>
+        <button class="orange" onclick="startTF('${t.code}')">Luyện Đúng/Sai</button>
+      </div>
+    </div>`).join("");
+}
+
+function startTopic(code){
+  const t = TOPICS.find(x=>x.code===code);
+  currentMode="mcq"; current=t; currentQuestions=shuffle(t.questions);
+  renderMCQ(`Chủ đề ${t.code}. ${t.name}`, currentQuestions);
+}
+function startTF(code){
+  const t = TOPICS.find(x=>x.code===code);
+  currentMode="tf"; current=t; currentQuestions=shuffle(t.tf);
+  renderTF(`Đúng/Sai - Chủ đề ${t.code}. ${t.name}`, currentQuestions);
+}
+function shuffleAllPractice(){
+  const all = TOPICS.flatMap(t=>t.questions.map(q=>({...q, topic:t.code})));
+  currentMode="mcq"; current=null; currentQuestions=sample(all,30);
+  renderMCQ("Luyện ngẫu nhiên toàn bộ", currentQuestions);
+}
+function startMock(){
+  const mcq = sample(TOPICS.flatMap(t=>t.questions.map(q=>({...q, topic:t.code}))),24);
+  const tf = sample(TOPICS.flatMap(t=>t.tf.map(q=>({...q, topic:t.code}))),6);
+  currentMode="mock"; currentQuestions={mcq,tf};
+  renderMock(mcq,tf);
+}
+
+function renderMCQ(title, qs){
+  $("quizArea").classList.remove("hidden");
+  $("quizArea").scrollIntoView({behavior:"smooth"});
+  $("quizArea").innerHTML = `
+    <div class="quizHeader"><h2>${title}</h2><button class="secondary" onclick="renderTopics()">Quay lại chủ đề</button></div>
+    <div class="progressOuter"><div class="progressInner" id="prog"></div></div>
+    ${qs.map((q,i)=>`
+      <div class="question">
+        <h3>Câu ${i+1}. ${q.q}</h3>
+        ${q.options.map((op,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}" onchange="updateProgress(${qs.length})"> ${String.fromCharCode(65+j)}. ${escapeHtml(op)}</label>`).join("")}
+      </div>`).join("")}
+    <button class="green" onclick="submitMCQ()">Nộp bài</button>`;
+}
+function renderTF(title, qs){
+  $("quizArea").classList.remove("hidden");
+  $("quizArea").scrollIntoView({behavior:"smooth"});
+  $("quizArea").innerHTML = `
+    <div class="quizHeader"><h2>${title}</h2><button class="secondary" onclick="renderTopics()">Quay lại chủ đề</button></div>
+    ${qs.map((q,i)=>`
+      <div class="question">
+        <h3>Câu ${i+1}. ${q.title}</h3>
+        ${q.items.map((it,j)=>`
+          <div class="tfItem">
+            <p><b>${String.fromCharCode(97+j)})</b> ${it.text}</p>
+            <label><input type="radio" name="tf${i}_${j}" value="true"> Đúng</label>
+            <label style="margin-left:18px"><input type="radio" name="tf${i}_${j}" value="false"> Sai</label>
+          </div>`).join("")}
+      </div>`).join("")}
+    <button class="green" onclick="submitTF()">Nộp bài Đúng/Sai</button>`;
+}
+function renderMock(mcq,tf){
+  $("quizArea").classList.remove("hidden");
+  $("quizArea").scrollIntoView({behavior:"smooth"});
+  $("quizArea").innerHTML = `
+    <div class="quizHeader"><h2>Đề thi thử 24 câu trắc nghiệm + 6 câu Đúng/Sai</h2><button class="secondary" onclick="startMock()">Tạo đề khác</button></div>
+    <h3>Phần I. Trắc nghiệm nhiều lựa chọn</h3>
+    ${mcq.map((q,i)=>`
+      <div class="question">
+        <h3>Câu ${i+1}. ${q.q}</h3>
+        ${q.options.map((op,j)=>`<label class="option"><input type="radio" name="mq${i}" value="${j}"> ${String.fromCharCode(65+j)}. ${escapeHtml(op)}</label>`).join("")}
+      </div>`).join("")}
+    <h3>Phần II. Đúng/Sai</h3>
+    ${tf.map((q,i)=>`
+      <div class="question">
+        <h3>Câu ${i+1}. ${q.title}</h3>
+        ${q.items.map((it,j)=>`
+          <div class="tfItem">
+            <p><b>${String.fromCharCode(97+j)})</b> ${it.text}</p>
+            <label><input type="radio" name="mtf${i}_${j}" value="true"> Đúng</label>
+            <label style="margin-left:18px"><input type="radio" name="mtf${i}_${j}" value="false"> Sai</label>
+          </div>`).join("")}
+      </div>`).join("")}
+    <button class="green" onclick="submitMock()">Nộp đề thi thử</button>`;
+}
+
+function updateProgress(total){
+  const answered = new Set([...document.querySelectorAll('input[type=radio]:checked')].map(x=>x.name)).size;
+  const p = $("prog"); if(p) p.style.width = Math.round(answered/total*100)+"%";
+}
+function submitMCQ(){
+  let correct=0, html='<h2>Kết quả luyện tập</h2>';
+  currentQuestions.forEach((q,i)=>{
+    const v = document.querySelector(`input[name=q${i}]:checked`);
+    const ok = v && Number(v.value)===q.answer;
+    if(ok) correct++;
+    html += `<div class="question ${ok?'':'wrongBox'}"><b>Câu ${i+1}:</b> <span class="${ok?'correctText':'wrongText'}">${ok?'Đúng':'Sai'}</span>
+    <div class="explain">Đáp án: ${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}<br>${q.explain}</div></div>`;
+  });
+  showResult(html, currentQuestions.length, correct);
+}
+function submitTF(){
+  let total=0, correct=0, html='<h2>Kết quả Đúng/Sai</h2>';
+  currentQuestions.forEach((q,i)=>{
+    html += `<div class="question"><h3>Câu ${i+1}. ${q.title}</h3>`;
+    q.items.forEach((it,j)=>{
+      total++;
+      const v = document.querySelector(`input[name=tf${i}_${j}]:checked`);
+      const user = v ? v.value==="true" : null;
+      const ok = user===it.answer;
+      if(ok) correct++;
+      html += `<p><b>${String.fromCharCode(97+j)})</b> <span class="${ok?'correctText':'wrongText'}">${ok?'Đúng':'Sai'}</span> — Đáp án đúng: ${it.answer?'Đúng':'Sai'}</p>`;
+    });
+    html += `<div class="explain">${q.explain}</div></div>`;
+  });
+  showResult(html,total,correct);
+}
+function submitMock(){
+  let total=0, correct=0, html='<h2>Kết quả đề thi thử</h2><h3>Phần I</h3>';
+  currentQuestions.mcq.forEach((q,i)=>{
+    total++;
+    const v=document.querySelector(`input[name=mq${i}]:checked`);
+    const ok=v && Number(v.value)===q.answer;
+    if(ok) correct++;
+    html+=`<p>Câu ${i+1}: <span class="${ok?'correctText':'wrongText'}">${ok?'Đúng':'Sai'}</span> — Đáp án ${String.fromCharCode(65+q.answer)}</p>`;
+  });
+  html+='<h3>Phần II</h3>';
+  currentQuestions.tf.forEach((q,i)=>{
+    html+=`<div class="question"><b>Câu Đ/S ${i+1}. ${q.title}</b>`;
+    q.items.forEach((it,j)=>{
+      total++;
+      const v=document.querySelector(`input[name=mtf${i}_${j}]:checked`);
+      const user=v?v.value==="true":null;
+      const ok=user===it.answer;
+      if(ok) correct++;
+      html+=`<p>${String.fromCharCode(97+j)}) <span class="${ok?'correctText':'wrongText'}">${ok?'Đúng':'Sai'}</span> — Đáp án: ${it.answer?'Đúng':'Sai'}</p>`;
+    });
+    html+=`<div class="explain">${q.explain}</div></div>`;
+  });
+  showResult(html,total,correct);
+}
+function showResult(detail,total,correct){
+  const rate = Math.round(correct/total*100);
+  let comment = rate>=85 ? "Xuất sắc! Em nắm rất chắc kiến thức, có thể luyện thêm đề tổng hợp nâng cao." :
+                rate>=70 ? "Khá tốt! Em đã hiểu phần lớn kiến thức, cần rà soát các câu sai để tăng độ chắc chắn." :
+                rate>=50 ? "Đạt mức cơ bản. Em nên ôn lại lí thuyết và luyện thêm các dạng vận dụng." :
+                "Cần cố gắng thêm. Em nên học lại kiến thức nền và luyện từng chủ đề nhỏ.";
+  $("quizArea").innerHTML = `${detail}<div class="result"><h2>Điểm: ${correct}/${total} (${rate}%)</h2><p><b>Nhận xét:</b> ${comment}</p><div class="btns"><button onclick="startMock()">Thi thử đề khác</button><button class="secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Về đầu trang</button></div></div>`;
+  saveStats(total,correct);
+}
+function escapeHtml(s){
+ return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+renderTopics(); loadStats();
+</script>
+</body>
+</html>
